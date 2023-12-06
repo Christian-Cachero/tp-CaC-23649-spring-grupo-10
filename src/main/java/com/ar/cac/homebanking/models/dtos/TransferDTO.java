@@ -12,12 +12,8 @@ import java.util.Date;
 @Builder
 public class TransferDTO {
     private Long id;
-
-    private Long origin;
-
-    private Long target;
-
+    private AccountDTO originAccount;
+    private AccountDTO targetAccount;
     private Date date;
-
     private BigDecimal amount;
 }

@@ -56,18 +56,17 @@ public class TransferService {
             return "No se ha eliminado la transferencia";
         }
     }
-
     @Transactional
     public TransferDTO performTransfer(TransferDTO dto) {
         // Comprobar si las cuentas de origen y destino existen
-        Account originAccount = accountRepository.findById(dto.getOrigin())
-                .orElseThrow(() -> new AccountNotFoundException("Account not found with id: " + dto.getOrigin()));
-        Account destinationAccount = accountRepository.findById(dto.getTarget())
-                .orElseThrow(() -> new AccountNotFoundException("Account not found with id: " + dto.getTarget()));
+        Account originAccount = accountRepository.findById(dto.getOriginAccount().getId())
+                .orElseThrow(() -> new AccountNotFoundException("Account not found with id: " + dto.getOriginAccount().getId()));
+        Account destinationAccount = accountRepository.findById(dto.getTargetAccount().getId())
+                .orElseThrow(() -> new AccountNotFoundException("Account not found with id: " + dto.getTargetAccount().getId()));
 
         // Comprobar si la cuenta de origen tiene fondos suficientes
         if (originAccount.getAmount().compareTo(dto.getAmount()) < 0) {
-            throw new InsufficientFoundsException("Insufficient funds in the account with id: " + dto.getOrigin());
+            throw new InsufficientFoundsException("Insufficient funds in the account with id: " + dto.getOriginAccount().getId());
         }
 
         // Realizar la transferencia
@@ -80,18 +79,14 @@ public class TransferService {
 
         // Crear la transferencia y guardarla en la base de datos
         Transfer transfer = new Transfer();
-        // Creamos un objeto del tipo Date para obtener la fecha actual
         Date date = new Date();
-        // Seteamos el objeto fecha actual en el transferDto
         transfer.setDate(date);
-        transfer.setOrigin(originAccount.getId());
-        transfer.setTarget(destinationAccount.getId());
+        transfer.setOriginAccount(originAccount);
+        transfer.setTargetAccount(destinationAccount);
         transfer.setAmount(dto.getAmount());
         transfer = repository.save(transfer);
 
-        // Devolver el DTO de la transferencia realizada
+        // Devolver el DTO de la transferencia realizada con información detallada de las cuentas
         return TransferMapper.transferToDto(transfer);
     }
-
-
 }

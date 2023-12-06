@@ -18,11 +18,18 @@ public class Transfer {
     @Column(name = "transfer_id")
     private Long id;
 
-    private Long origin;
-
-    private Long target;
-
     private Date date;
 
     private BigDecimal amount;
+    @ManyToOne
+    @JoinColumn(name = "origin_account_id")
+    private Account originAccount;
+
+    @ManyToOne
+    @JoinColumn(name = "target_account_id")
+    private Account targetAccount;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
