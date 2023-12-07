@@ -86,7 +86,7 @@ public class TransferService {
         transfer.setAmount(dto.getAmount());
         transfer = repository.save(transfer);
 
-        // Devolver el DTO de la transferencia realizada con información detallada de las cuentas
+        // Devuelve el DTO de la transferencia con información detallada de las cuentas
         return TransferMapper.transferToDto(transfer);
     }
 }
