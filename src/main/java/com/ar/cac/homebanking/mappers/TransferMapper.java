@@ -6,7 +6,6 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TransferMapper {
-
     public Transfer dtoToTransfer(TransferDTO dto){
         return Transfer.builder()
                 .amount(dto.getAmount())
