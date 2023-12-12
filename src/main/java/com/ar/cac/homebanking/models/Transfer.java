@@ -29,7 +29,7 @@ public class Transfer {
     @JoinColumn(name = "target_account_id")
     private Account targetAccount;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+   @ManyToOne
+   @JoinColumn(name = "user_id")
+   private User user; // falta asignar el usuario que realiza la transferencia
 }

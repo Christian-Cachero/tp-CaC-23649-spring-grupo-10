@@ -1,8 +1,10 @@
 package com.ar.cac.homebanking.services;
 
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
+import com.ar.cac.homebanking.mappers.AccountMapper;
 import com.ar.cac.homebanking.mappers.UserMapper;
 import com.ar.cac.homebanking.models.User;
+import com.ar.cac.homebanking.models.dtos.AccountDTO;
 import com.ar.cac.homebanking.models.dtos.UserDTO;
 import com.ar.cac.homebanking.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,12 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     // Inyectar una instancia del Repositorio
+
+    private final UserRepository repository;
     @Autowired
-    private UserRepository repository;
+    public UserService(UserRepository userRepository) {
+        this.repository = userRepository;
+    }
 
     // Metodos
 
@@ -44,8 +50,19 @@ public class UserService {
 
 
     public UserDTO getUserById(Long id) {
-        User entity = repository.findById(id).get();
-        return UserMapper.userToDto(entity);
+        User user = repository.findById(id)
+                .orElseThrow(() -> new UserNotExistsException("Usuario no encontrado"));
+
+        UserDTO userDTO = UserMapper.userToDto(user);
+
+        // Obtener y mapear las cuentas del usuario
+        List<AccountDTO> accountDTOs = user.getAccounts().stream()
+                .map(AccountMapper::accountToDto)
+                .collect(Collectors.toList());
+
+        userDTO.setAccounts(accountDTOs);
+
+        return userDTO;
     }
 
     public String deleteUser(Long id){
