@@ -10,6 +10,7 @@ import com.ar.cac.homebanking.models.dtos.TransferDTO;
 import com.ar.cac.homebanking.repositories.AccountRepository;
 import com.ar.cac.homebanking.repositories.TransferRepository;
 import com.ar.cac.homebanking.services.abstraction.TransferService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +27,11 @@ public class TransferServiceImp implements TransferService {
 
     private final AccountRepository accountRepository;
 
+
     public TransferServiceImp(TransferRepository repository, AccountRepository accountRepository){
         this.repository = repository;
         this.accountRepository = accountRepository;
+
     }
 
     public Optional<List<TransferDTO>> getTransfers(){
@@ -36,6 +39,11 @@ public class TransferServiceImp implements TransferService {
         return Optional.of(transfers.stream()
                 .map(TransferMapper::transferToDto)
                 .collect(Collectors.toList()));
+
+        /*List<Transfer> transfers = repository.findAll();
+        return transfers.stream()
+                .map(TransferMapper::transferToDto)
+                .collect(Collectors.toList());*/
     }
 
     public Optional<TransferDTO> getTransferById(Long id){
@@ -69,15 +77,15 @@ public class TransferServiceImp implements TransferService {
         // Comprobar si las cuentas de origen y destino existen
         Account originAccount = accountRepository.findById(dto.getOriginAccount().getId())
                 .orElseThrow(() -> new AccountNotFoundException("Account not found with id: "
-                        + dto.getOriginAccount().getId()));
+                        + dto.getOriginAccount()));
         Account destinationAccount = accountRepository.findById(dto.getTargetAccount().getId())
                 .orElseThrow(() -> new AccountNotFoundException("Account not found with id: "
-                        + dto.getTargetAccount().getId()));
+                        + dto.getTargetAccount()));
 
         // Comprobar si la cuenta de origen tiene fondos suficientes
         if (originAccount.getAmount().compareTo(dto.getAmount()) < 0) {
             throw new InsufficientFoundsException("Insufficient funds in the account with id: "
-                    + dto.getOriginAccount().getId());
+                    + dto.getOriginAccount());
         }
 
         // Realizar la transferencia

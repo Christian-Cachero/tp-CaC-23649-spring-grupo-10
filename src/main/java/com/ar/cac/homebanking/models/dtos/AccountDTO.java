@@ -1,6 +1,7 @@
 package com.ar.cac.homebanking.models.dtos;
 
 import com.ar.cac.homebanking.models.enums.AccountType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

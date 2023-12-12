@@ -19,7 +19,6 @@ public class AccountServiceImp implements AccountService {
     private final AccountRepository repository;
 
 
-
     public AccountServiceImp(AccountRepository repository){
         this.repository = repository;
 
@@ -82,11 +81,10 @@ public class AccountServiceImp implements AccountService {
                 accountToModify.setAmount(dto.getAmount());
             }
 
-            //Account accountModified = repository.save(accountToModify);
-            //AccountMapper.accountToDto(accountModified);
+            Account accountModified = repository.save(accountToModify);
 
-            return Optional.of(AccountMapper.accountToDto(repository
-                    .save(AccountMapper.dtoToAccount(dto))));
+           return Optional.of(AccountMapper.accountToDto(accountModified));
+
         }
         return Optional.of(new AccountDTO());
     }
