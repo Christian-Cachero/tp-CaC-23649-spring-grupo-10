@@ -1,4 +1,4 @@
-package com.ar.cac.homebanking.services;
+package com.ar.cac.homebanking.services.implementation;
 
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
 import com.ar.cac.homebanking.mappers.UserMapper;
@@ -54,8 +54,8 @@ public class UserServiceImp implements UserService {
 
 
     public Optional<UserDTO> getUserById(Long id) {
-        return repository.findById(id).map(UserMapper::userToDto)
-                .orElseThrow(() -> new UserNotExistsException("Usuario no encontrado"));
+        return Optional.of(repository.findById(id).map(UserMapper::userToDto)
+                .orElseThrow(() -> new UserNotExistsException("Usuario no encontrado")));
     }
 
     public String deleteUser(Long id){

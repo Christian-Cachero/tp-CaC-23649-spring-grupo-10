@@ -1,7 +1,9 @@
 package com.ar.cac.homebanking.controllers;
 
 import com.ar.cac.homebanking.models.dtos.AccountDTO;
+
 import com.ar.cac.homebanking.services.implementation.AccountServiceImp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +13,9 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/accounts")
-public class AccountController {
+public class AccountController{
 
+    @Autowired
     private final AccountServiceImp service;
 
     public AccountController(AccountServiceImp service){
@@ -32,7 +35,7 @@ public class AccountController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<AccountDTO> getAccount(@PathVariable Long id){
+    public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id){
         return service.getAccountById(id).map(t -> new ResponseEntity<>(t, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
                 //ResponseEntity.status(HttpStatus.OK).body(service.getAccountById(id));

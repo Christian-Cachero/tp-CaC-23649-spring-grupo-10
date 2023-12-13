@@ -1,7 +1,6 @@
 package com.ar.cac.homebanking.controllers;
 
 import com.ar.cac.homebanking.models.dtos.UserDTO;
-import com.ar.cac.homebanking.models.dtos.UserDTO;
 import com.ar.cac.homebanking.services.implementation.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
