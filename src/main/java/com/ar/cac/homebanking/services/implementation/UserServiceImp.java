@@ -1,4 +1,4 @@
-package com.ar.cac.homebanking.services.implementation;
+package com.ar.cac.homebanking.services;
 
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
 import com.ar.cac.homebanking.mappers.UserMapper;
@@ -7,6 +7,8 @@ import com.ar.cac.homebanking.models.dtos.UserDTO;
 import com.ar.cac.homebanking.repositories.UserRepository;
 import com.ar.cac.homebanking.services.abstraction.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
@@ -17,8 +19,12 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImp implements UserService {
     // Inyectar una instancia del Repositorio
-    @Autowired
-    private UserRepository repository;
+
+    private final UserRepository repository;
+
+    public UserService(UserRepository userRepository) {
+        this.repository = userRepository;
+    }
 
     // Metodos
 

@@ -13,13 +13,14 @@ import java.util.Date;
 @Setter
 @Builder
 public class Transfer {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "transfer_id")
     private Long id;
 
+    private Date date;
 
+    private BigDecimal amount;
     @ManyToOne
     @JoinColumn(name = "origin_account_id")
     private Account originAccount;
@@ -27,10 +28,6 @@ public class Transfer {
     @ManyToOne
     @JoinColumn(name = "target_account_id")
     private Account targetAccount;
-
-    private Date date;
-
-    private BigDecimal amount;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
