@@ -2,10 +2,9 @@ package com.ar.cac.homebanking.models;
 
 
 import com.ar.cac.homebanking.models.enums.AccountType;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import java.util.List;
 
 import java.math.BigDecimal;
@@ -14,8 +13,14 @@ import java.math.BigDecimal;
 @Table(name = "cuentas")
 @Getter
 @Setter
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Account {
+
+   /* public Account(){
+
+    }*/
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +39,10 @@ public class Account {
     @JoinColumn(name = "user_id")
     private User owner;
 
-   /* @OneToMany(mappedBy = "originAccount", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "originAccount", cascade = CascadeType.ALL)
     private List<Transfer> originTransfers;
 
     @OneToMany(mappedBy = "targetAccount", cascade = CascadeType.ALL)
-    private List<Transfer> targetTransfers;*/
+    private List<Transfer> targetTransfers;
 
 }
