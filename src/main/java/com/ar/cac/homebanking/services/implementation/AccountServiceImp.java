@@ -3,12 +3,14 @@ package com.ar.cac.homebanking.services.implementation;
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
 import com.ar.cac.homebanking.mappers.AccountMapper;
 import com.ar.cac.homebanking.models.Account;
+import com.ar.cac.homebanking.models.User;
 import com.ar.cac.homebanking.models.dtos.AccountDTO;
+import com.ar.cac.homebanking.models.enums.AccountType;
 import com.ar.cac.homebanking.repositories.AccountRepository;
+import com.ar.cac.homebanking.repositories.UserRepository;
 import com.ar.cac.homebanking.services.abstraction.AccountService;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,11 +19,11 @@ import java.util.stream.Collectors;
 public class AccountServiceImp implements AccountService {
 
     private final AccountRepository repository;
+    private final UserRepository userRepository;
 
-
-    public AccountServiceImp(AccountRepository repository){
+    public AccountServiceImp(AccountRepository repository, UserRepository userRepository) {
         this.repository = repository;
-
+        this.userRepository = userRepository;
     }
     public Optional<List<AccountDTO>> getAccounts() {
         List<Account> accounts = repository.findAll();
@@ -35,10 +37,21 @@ public class AccountServiceImp implements AccountService {
 
     public Optional<AccountDTO> createAccount(AccountDTO dto) {
         // TODO: REFACTOR
-        //dto.setType(AccountType.SAVINGS_BANK);
-        dto.setAmount(BigDecimal.ZERO);
-        Account newAccount = repository.save(AccountMapper.dtoToAccount(dto));
-        return Optional.of(AccountMapper.accountToDto(newAccount));
+        User owner = userRepository.findById(dto.getOwnerId())
+                .orElseThrow(() -> new UserNotExistsException("Usuario no encontrado"));
+
+        // Crear la cuenta
+        Account newAccount = Account.builder()
+                .type(AccountType.SAVINGS_BANK)
+                .cbu(dto.getCbu())
+                .alias(dto.getAlias())
+                .amount(dto.getAmount())
+                .owner(owner)
+                .build();
+
+        Account savedAccount = repository.save(newAccount);
+
+        return Optional.of(AccountMapper.accountToDto(savedAccount));
     }
 
     public Optional<AccountDTO> getAccountById(Long id) {
