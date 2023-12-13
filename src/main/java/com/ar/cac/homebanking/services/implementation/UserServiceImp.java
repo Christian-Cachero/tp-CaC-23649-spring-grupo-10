@@ -1,8 +1,10 @@
 package com.ar.cac.homebanking.services.implementation;
 
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
+import com.ar.cac.homebanking.mappers.AccountMapper;
 import com.ar.cac.homebanking.mappers.UserMapper;
 import com.ar.cac.homebanking.models.User;
+import com.ar.cac.homebanking.models.dtos.AccountDTO;
 import com.ar.cac.homebanking.models.dtos.UserDTO;
 import com.ar.cac.homebanking.repositories.UserRepository;
 import com.ar.cac.homebanking.services.abstraction.UserService;
@@ -19,8 +21,12 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImp implements UserService {
     // Inyectar una instancia del Repositorio
-    @Autowired
-    private UserRepository repository;
+
+    private final UserRepository repository;
+
+    public UserServiceImp(UserRepository userRepository) {
+        this.repository = userRepository;
+    }
 
     // Metodos
 
