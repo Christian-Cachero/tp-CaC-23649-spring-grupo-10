@@ -1,9 +1,13 @@
-package com.ar.cac.homebanking.services.implementation;
+package com.ar.cac.homebanking.services;
 
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
 import com.ar.cac.homebanking.mappers.AccountMapper;
+import com.ar.cac.homebanking.mappers.UserMapper;
 import com.ar.cac.homebanking.models.Account;
+import com.ar.cac.homebanking.models.User;
 import com.ar.cac.homebanking.models.dtos.AccountDTO;
+import com.ar.cac.homebanking.models.dtos.UserDTO;
+import com.ar.cac.homebanking.models.enums.AccountType;
 import com.ar.cac.homebanking.repositories.AccountRepository;
 import com.ar.cac.homebanking.services.abstraction.AccountService;
 import org.springframework.stereotype.Service;
@@ -21,7 +25,6 @@ public class AccountServiceImp implements AccountService {
 
     public AccountServiceImp(AccountRepository repository){
         this.repository = repository;
-
     }
     public Optional<List<AccountDTO>> getAccounts() {
         List<Account> accounts = repository.findAll();

@@ -1,4 +1,4 @@
-package com.ar.cac.homebanking.services.implementation;
+package com.ar.cac.homebanking.services;
 
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
 import com.ar.cac.homebanking.mappers.UserMapper;
@@ -7,6 +7,8 @@ import com.ar.cac.homebanking.models.dtos.UserDTO;
 import com.ar.cac.homebanking.repositories.UserRepository;
 import com.ar.cac.homebanking.services.abstraction.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
@@ -52,7 +54,8 @@ public class UserServiceImp implements UserService {
 
 
     public Optional<UserDTO> getUserById(Long id) {
-        return repository.findById(id).map(UserMapper::userToDto);
+        return repository.findById(id).map(UserMapper::userToDto)
+                .orElseThrow(() -> new UserNotExistsException("Usuario no encontrado"));
     }
 
     public String deleteUser(Long id){
