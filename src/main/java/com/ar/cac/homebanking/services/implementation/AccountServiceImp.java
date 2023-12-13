@@ -11,7 +11,6 @@ import com.ar.cac.homebanking.repositories.UserRepository;
 import com.ar.cac.homebanking.services.abstraction.AccountService;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,7 +36,6 @@ public class AccountServiceImp implements AccountService {
     }
 
     public Optional<AccountDTO> createAccount(AccountDTO dto) {
-        // TODO: REFACTOR
         User owner = userRepository.findById(dto.getOwnerId())
                 .orElseThrow(() -> new UserNotExistsException("Usuario no encontrado"));
 
@@ -101,7 +99,6 @@ public class AccountServiceImp implements AccountService {
            return Optional.of(AccountMapper.accountToDto(accountModified));
 
         }
-           throw new UserNotExistsException("La cuenta a modificar no existe");
-
+        throw new UserNotExistsException("La cuenta a modificar no existe");
     }
 }

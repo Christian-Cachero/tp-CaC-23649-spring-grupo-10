@@ -1,19 +1,13 @@
 package com.ar.cac.homebanking.services.implementation;
 
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
-import com.ar.cac.homebanking.mappers.AccountMapper;
 import com.ar.cac.homebanking.mappers.UserMapper;
 import com.ar.cac.homebanking.models.User;
-import com.ar.cac.homebanking.models.dtos.AccountDTO;
 import com.ar.cac.homebanking.models.dtos.UserDTO;
 import com.ar.cac.homebanking.repositories.UserRepository;
 import com.ar.cac.homebanking.services.abstraction.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -104,8 +98,7 @@ public class UserServiceImp implements UserService {
 
             return Optional.of(UserMapper.userToDto(userModified));
         }
-
-        return Optional.of(new UserDTO());
+        throw new UserNotExistsException("La cuenta a modificar no existe");
     }
 
     // Validar que existan usuarios unicos por mail
