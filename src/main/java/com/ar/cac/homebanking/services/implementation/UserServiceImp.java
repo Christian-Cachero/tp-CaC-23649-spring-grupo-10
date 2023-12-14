@@ -2,12 +2,15 @@ package com.ar.cac.homebanking.services.implementation;
 
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
 import com.ar.cac.homebanking.mappers.UserMapper;
+import com.ar.cac.homebanking.mappers.AccountMapper;
 import com.ar.cac.homebanking.models.User;
+import com.ar.cac.homebanking.models.dtos.AccountDTO;
 import com.ar.cac.homebanking.models.dtos.UserDTO;
 import com.ar.cac.homebanking.repositories.UserRepository;
 import com.ar.cac.homebanking.services.abstraction.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,9 +31,52 @@ public class UserServiceImp implements UserService {
         // Obtengo la lista de la entidad usuario de la db
         List<User> users = repository.findAll();
         // Mapear cada usuario de la lista hacia un dto
-        return Optional.of(users.stream()
+        List<UserDTO> userDtos = users.stream()
                 .map(UserMapper::userToDto)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+
+        return Optional.of(userDtos);
+    }
+
+    /* pruebas sin exit aún.
+    public Optional<List<UserDTO>> getUsers(List<Long> ids) {
+        List<User> users = repository.findAllById(ids);
+        List<UserDTO> userDTOs = new ArrayList<>();
+        for (User user : users) {
+            UserDTO userDTO = UserMapper.userToDto(user);
+            userDTOs.add(userDTO);
+        }
+        return Optional.of(userDTOs);
+    }*/
+
+    public Optional<List<UserDTO>> getUsersByIds(List<Long> ids) {
+        List<User> users = repository.findAllById(ids);
+        List<UserDTO> userDTOs = new ArrayList<>();
+        for (User user : users) {
+            UserDTO userDTO = UserMapper.userToDto(user);
+            // Obtener y mapear las cuentas del usuario
+            List<AccountDTO> accountDTOs = user.getAccounts().stream()
+                    .map(AccountMapper::accountToDto)
+                    .collect(Collectors.toList());
+            userDTO.setAccounts(accountDTOs);
+            userDTOs.add(userDTO);
+        }
+        return Optional.of(userDTOs);
+    }
+    public Optional<UserDTO> getUserById(Long id) {
+        User user = repository.findById(id)
+                .orElseThrow(() -> new UserNotExistsException("Usuario no encontrado"));
+
+        UserDTO userDTO = UserMapper.userToDto(user);
+
+        // Obtener y mapear las cuentas del usuario
+        List<AccountDTO> accountDTOs = user.getAccounts().stream()
+                .map(AccountMapper::accountToDto)
+                .collect(Collectors.toList());
+
+        userDTO.setAccounts(accountDTOs);
+
+        return Optional.of(userDTO);
     }
 
     public Optional<UserDTO> createUser(UserDTO userDto){
@@ -52,11 +98,6 @@ public class UserServiceImp implements UserService {
 
     }
 
-
-    public Optional<UserDTO> getUserById(Long id) {
-        return Optional.of(repository.findById(id).map(UserMapper::userToDto)
-                .orElseThrow(() -> new UserNotExistsException("Usuario no encontrado")));
-    }
 
     public String deleteUser(Long id){
         if (repository.existsById(id)){

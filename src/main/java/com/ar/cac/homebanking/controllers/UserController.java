@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+//import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +19,10 @@ public class UserController {
     @Autowired
     private final UserServiceImp service;
 
-    public UserController(UserServiceImp service){
+    //private final UserRepository repository;
+    public UserController(UserServiceImp service /*UserRepository repository*/){
         this.service = service;
+        /*this.repository = repository;*/
     }
 
     // Para cada método HTTP permitido debemos realizar una acción
@@ -38,6 +41,17 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
+
+   /* @PostMapping("/ids")
+    public ResponseEntity<List<UserDTO>> getUsers(@RequestBody List<Long> ids) {
+        List<User> users = repository.findAllById(ids);
+        List<UserDTO> userDTOs = new ArrayList<>();
+        for (User user : users) {
+            UserDTO userDTO = UserMapper.userToDto(user);
+            userDTOs.add(userDTO);
+        }
+        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
+    }*/
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id){

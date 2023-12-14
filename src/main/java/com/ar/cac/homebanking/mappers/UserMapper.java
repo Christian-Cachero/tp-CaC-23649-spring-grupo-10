@@ -4,6 +4,9 @@ import com.ar.cac.homebanking.models.User;
 import com.ar.cac.homebanking.models.dtos.UserDTO;
 import lombok.experimental.UtilityClass;
 
+//import java.util.ArrayList;
+//import java.util.List;
+
 @UtilityClass
 public class UserMapper {
 
@@ -19,6 +22,15 @@ public class UserMapper {
         return user;
     }
 
+  /*  public static List<User> dtoToUsers(List<UserDTO> dtos){
+        List<User> users = new ArrayList<>();
+        for (UserDTO dto : dtos) {
+            users.add(dtoToUser(dto));
+        }
+        return users;
+    }
+*/
+
     public static UserDTO userToDto(User user){
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
@@ -29,4 +41,12 @@ public class UserMapper {
         dto.setPassword(user.getPassword());
         return dto;
     }
+
+   /* public static List<UserDTO> usersToDto(List<User> users){
+        List<UserDTO> dtos = new ArrayList<>();
+        for (User user : users) {
+            dtos.add(userToDto(user));
+        }
+        return dtos;
+    }*/
 }

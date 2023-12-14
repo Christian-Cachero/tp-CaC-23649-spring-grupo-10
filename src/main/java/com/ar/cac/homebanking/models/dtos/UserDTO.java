@@ -1,6 +1,5 @@
 package com.ar.cac.homebanking.models.dtos;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +22,7 @@ public class UserDTO {
     private String surname;
 
     private String dni;
+
     private List<AccountDTO> accounts;
 
 }
